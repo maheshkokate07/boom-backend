@@ -70,7 +70,7 @@ export const getVideosByUser = async (req, res) => {
 
 export const getAllVideos = async (req, res) => {
     try {
-        const videos = await Video.find().select('-description -videoUrl').populate("uploader", "_id username");
+        const videos = await Video.find().populate("uploader", "_id username");
         res.status(200).json({ messages: "Videos fetched succssfully", data: videos });
     } catch (err) {
         res.status(500).json({
