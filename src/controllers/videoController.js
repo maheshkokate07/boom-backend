@@ -70,13 +70,16 @@ export const getVideosByUser = async (req, res) => {
 
 export const getAllVideos = async (req, res) => {
     try {
-        const videos = await Video.find().populate("uploader", "_id username");
-        res.status(200).json({ messages: "Videos fetched succssfully", data: videos });
+        const videos = await Video.find()
+            .populate("uploader", "_id username")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({ messages: "Videos fetched successfully", data: videos });
     } catch (err) {
         res.status(500).json({
             message: "Internal server error",
             error: err.message
-        })
+        });
     }
 }
 
@@ -116,7 +119,7 @@ export const likeVideo = async (req, res) => {
         let message = "", likeAction;
 
         // If user already liked then remove like either like and set message
-        if (video.likes.includes(userId)) {
+        if (video.likes?.includes(userId)) {
             likeAction = { $pull: { likes: userId } };
             message = "Video unliked";
         } else {
